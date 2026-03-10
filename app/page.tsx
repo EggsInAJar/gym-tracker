@@ -1,12 +1,22 @@
 'use client'
 
-import { Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { Suspense, useEffect } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 function LoginForm() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const notAllowed = searchParams.get('error') === 'not_allowed'
+
+  // If Supabase redirected to /?code=... (e.g. www vs non-www mismatch), send to callback
+  useEffect(() => {
+    const code = searchParams.get('code')
+    if (code) {
+      const next = searchParams.get('next') ?? '/dashboard'
+      router.replace(`/auth/callback?code=${code}&next=${encodeURIComponent(next)}`)
+    }
+  }, [searchParams, router])
 
   const handleGoogleLogin = async () => {
     const supabase = createClient()
