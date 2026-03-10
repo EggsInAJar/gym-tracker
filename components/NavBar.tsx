@@ -24,7 +24,7 @@ export default function NavBar({ userName }: NavBarProps) {
     <nav className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-10">
       <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
         <div className="flex items-center gap-6">
-          <span className="font-bold text-zinc-50">🏋️ Gym Squad</span>
+          <span className="font-bold text-zinc-50">🏋️ PlexTech Gym Comp</span>
           <div className="flex gap-1">
             <Link
               href="/dashboard"

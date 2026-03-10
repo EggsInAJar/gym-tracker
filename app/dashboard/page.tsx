@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getCurrentWeek, getWeekDateRange, formatDate, REQUIRED_SESSIONS_PER_WEEK } from '@/lib/utils'
 import NavBar from '@/components/NavBar'
-import SubmitPhotoButton from '@/components/SubmitPhotoButton'
+import CheckInFlow from '@/components/CheckInFlow'
 import WeekGrid from '@/components/WeekGrid'
 import { Submission } from '@/types'
 
@@ -20,6 +20,14 @@ export default async function DashboardPage() {
     .single()
 
   if (!profile) redirect('/')
+
+  // Fetch active checkin (checked in but not checked out)
+  const { data: activeCheckin } = await supabase
+    .from('checkins')
+    .select('*')
+    .eq('user_id', user.id)
+    .is('checked_out_at', null)
+    .maybeSingle()
 
   const { week, year } = getCurrentWeek()
   const { start, end } = getWeekDateRange(week, year)
@@ -130,10 +138,11 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Submit button */}
-        <SubmitPhotoButton
+        {/* Check in / session flow */}
+        <CheckInFlow
           userId={user.id}
           currentCount={count}
+          activeCheckin={activeCheckin}
           disabled={count >= REQUIRED_SESSIONS_PER_WEEK}
         />
 

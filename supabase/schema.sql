@@ -1,5 +1,5 @@
 -- =============================================
--- Gym Squad - Supabase Schema
+-- PlexTech Gym Comp - Supabase Schema
 -- Run this in your Supabase SQL editor
 -- =============================================
 
@@ -33,7 +33,30 @@ CREATE POLICY "profiles_insert" ON public.profiles
 CREATE POLICY "profiles_update" ON public.profiles
   FOR UPDATE TO authenticated USING (id = auth.uid());
 
--- 3. Submissions table
+-- 3. Checkins table
+CREATE TABLE IF NOT EXISTS public.checkins (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  checked_in_at TIMESTAMPTZ DEFAULT NOW(),
+  checked_out_at TIMESTAMPTZ,
+  duration_minutes INT,
+  gym_name TEXT,
+  location_lat DOUBLE PRECISION NOT NULL,
+  location_lng DOUBLE PRECISION NOT NULL
+);
+
+ALTER TABLE public.checkins ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "checkins_select" ON public.checkins
+  FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY "checkins_insert" ON public.checkins
+  FOR INSERT TO authenticated WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "checkins_update" ON public.checkins
+  FOR UPDATE TO authenticated USING (user_id = auth.uid());
+
+-- 4. Submissions table
 CREATE TABLE IF NOT EXISTS public.submissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,

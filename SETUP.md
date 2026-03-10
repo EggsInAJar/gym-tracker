@@ -1,4 +1,4 @@
-# Gym Squad — Setup Guide
+# PlexTech Gym Comp — Setup Guide
 
 ## 1. Create a Supabase project
 

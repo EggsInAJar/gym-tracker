@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gym Squad",
+  title: "PlexTech Gym Comp",
   description: "Gym accountability tracker for the squad",
 };
 

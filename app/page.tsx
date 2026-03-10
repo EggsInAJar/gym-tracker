@@ -23,7 +23,7 @@ function LoginForm() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
           <div className="text-5xl mb-4">🏋️</div>
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-50">Gym Squad</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-50">PlexTech Gym Comp</h1>
           <p className="text-zinc-400 mt-2 text-sm">4x a week. No excuses.</p>
         </div>
 
