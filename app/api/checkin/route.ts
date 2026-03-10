@@ -1,32 +1,23 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
-async function findNearbyGym(lat: number, lng: number): Promise<string | null> {
-  const query = `
-    [out:json][timeout:10];
-    (
-      node["leisure"="fitness_centre"](around:300,${lat},${lng});
-      node["sport"="fitness"](around:300,${lat},${lng});
-      way["leisure"="fitness_centre"](around:300,${lat},${lng});
-      way["sport"="fitness"](around:300,${lat},${lng});
-      node["amenity"="gym"](around:300,${lat},${lng});
-    );
-    out center 1;
-  `
-  try {
-    const res = await fetch('https://overpass-api.de/api/interpreter', {
-      method: 'POST',
-      body: query,
-    })
-    if (!res.ok) return null
-    const data = await res.json()
-    if (data.elements?.length > 0) {
-      return data.elements[0].tags?.name || 'Gym'
-    }
-    return null
-  } catch {
-    return null
-  }
+// RSF (Recreational Sports Facility) at UC Berkeley - 2301 Bancroft Way
+const RSF_LAT = 37.86854
+const RSF_LNG = -122.26278
+const RSF_RADIUS_KM = 0.2 // ~200m to cover building + GPS drift
+
+function distanceKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371
+  const dLat = (lat2 - lat1) * Math.PI / 180
+  const dLng = (lng2 - lng1) * Math.PI / 180
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+}
+
+function isAtRSF(lat: number, lng: number): boolean {
+  return distanceKm(RSF_LAT, RSF_LNG, lat, lng) <= RSF_RADIUS_KM
 }
 
 export async function POST(request: Request) {
@@ -47,17 +38,16 @@ export async function POST(request: Request) {
 
   if (existing) return NextResponse.json({ error: 'Already checked in' }, { status: 400 })
 
-  const gymName = await findNearbyGym(lat, lng)
-  if (!gymName) {
+  if (!isAtRSF(lat, lng)) {
     return NextResponse.json(
-      { error: 'No gym detected at your location. Make sure you\'re inside a gym.' },
+      { error: 'You must be at the RSF at Berkeley to check in.' },
       { status: 400 }
     )
   }
 
   const { data: checkin, error } = await supabase
     .from('checkins')
-    .insert({ user_id: user.id, location_lat: lat, location_lng: lng, gym_name: gymName })
+    .insert({ user_id: user.id, location_lat: lat, location_lng: lng, gym_name: 'RSF at Berkeley' })
     .select()
     .single()
 
