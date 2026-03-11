@@ -7,9 +7,10 @@ import { useRouter } from 'next/navigation'
 
 interface NavBarProps {
   userName: string
+  userId?: string
 }
 
-export default function NavBar({ userName }: NavBarProps) {
+export default function NavBar({ userName, userId }: NavBarProps) {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -50,7 +51,13 @@ export default function NavBar({ userName }: NavBarProps) {
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-zinc-500 text-sm hidden sm:block">{userName}</span>
+          {userId ? (
+            <Link href={`/profile/${userId}`} className="text-zinc-500 hover:text-zinc-300 text-sm hidden sm:block transition-colors">
+              {userName}
+            </Link>
+          ) : (
+            <span className="text-zinc-500 text-sm hidden sm:block">{userName}</span>
+          )}
           <button
             onClick={handleSignOut}
             className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors"
