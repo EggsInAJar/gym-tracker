@@ -3,6 +3,7 @@ export interface Profile {
   email: string
   name: string
   created_at: string
+  is_comp: boolean
 }
 
 export interface Submission {
