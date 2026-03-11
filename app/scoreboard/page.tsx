@@ -121,7 +121,7 @@ export default async function ScoreboardPage() {
 
   return (
     <div className="min-h-screen">
-      <NavBar userName={profile.name} />
+      <NavBar userName={profile.name} userId={user.id} />
 
       <main className="max-w-2xl mx-auto px-4 py-8">
         <div className="mb-6">

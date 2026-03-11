@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { REQUIRED_SESSIONS_PER_WEEK } from '@/lib/utils'
 
 interface Profile {
@@ -52,9 +53,9 @@ function CompRows({ rows, currentUserId }: { rows: Row[]; currentUserId: string 
                   <span className={`w-2 h-2 rounded-full shrink-0 ${
                     isComplete ? 'bg-green-500' : hasStarted ? 'bg-orange-500' : 'bg-red-500'
                   }`} />
-                  <span className="font-semibold text-zinc-50 truncate">
+                  <Link href={`/profile/${row.profile.id}`} className="font-semibold text-zinc-50 truncate hover:underline cursor-pointer">
                     {row.profile.name}{isMe && <span className="text-orange-400 text-xs ml-1">(you)</span>}
-                  </span>
+                  </Link>
                 </div>
                 <div className="text-xs text-zinc-500 mt-0.5 ml-4">
                   {row.relegationCount > 0 && (
@@ -108,9 +109,9 @@ function RecRows({ rows, currentUserId }: { rows: Row[]; currentUserId: string }
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full shrink-0 ${hasSessionsThisWeek ? 'bg-green-500' : 'bg-zinc-600'}`} />
-                  <span className="font-semibold text-zinc-50 truncate">
+                  <Link href={`/profile/${row.profile.id}`} className="font-semibold text-zinc-50 truncate hover:underline cursor-pointer">
                     {row.profile.name}{isMe && <span className="text-orange-400 text-xs ml-1">(you)</span>}
-                  </span>
+                  </Link>
                 </div>
               </div>
               <div className="flex gap-4 text-right shrink-0">
@@ -158,11 +159,11 @@ function AllRows({ rows, currentUserId }: { rows: Row[]; currentUserId: string }
                       ? (isComplete ? 'bg-green-500' : hasStarted ? 'bg-orange-500' : 'bg-red-500')
                       : (hasStarted ? 'bg-green-500' : 'bg-zinc-600')
                   }`} />
-                  <span className="font-semibold text-zinc-50 truncate">
+                  <Link href={`/profile/${row.profile.id}`} className="font-semibold text-zinc-50 truncate hover:underline cursor-pointer">
                     {row.profile.name}{isMe && <span className="text-orange-400 text-xs ml-1">(you)</span>}
-                  </span>
+                  </Link>
                   {isComp && (
-                    <span className="bg-amber-500/20 text-amber-400 text-xs px-1.5 py-0.5 rounded shrink-0">COMP</span>
+                    <span className="bg-gradient-to-r from-amber-500 to-yellow-400 text-zinc-900 font-bold text-xs px-1.5 py-0.5 rounded shadow-sm shadow-amber-500/30 shrink-0">COMP</span>
                   )}
                 </div>
                 {isComp && (

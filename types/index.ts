@@ -4,6 +4,9 @@ export interface Profile {
   name: string
   created_at: string
   is_comp: boolean
+  bench_pr: number | null
+  squat_pr: number | null
+  deadlift_pr: number | null
 }
 
 export interface Submission {
