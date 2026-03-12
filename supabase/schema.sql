@@ -19,8 +19,13 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  is_comp BOOLEAN NOT NULL DEFAULT FALSE  -- true = Comp tier, false = Rec tier; set manually via dashboard
 );
+
+-- Migration: add is_comp to existing profiles table
+-- ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_comp BOOLEAN NOT NULL DEFAULT FALSE;
+-- Set comp users: UPDATE public.profiles SET is_comp = true WHERE email IN ('user@example.com');
 
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
