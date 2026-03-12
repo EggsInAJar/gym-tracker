@@ -47,6 +47,14 @@ export default function NavBar({ userName, userId }: NavBarProps) {
             >
               Scoreboard
             </Link>
+            <Link
+              href="/feed"
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                pathname === '/feed' ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              Feed
+            </Link>
           </div>
         </div>
 
