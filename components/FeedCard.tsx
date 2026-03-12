@@ -76,31 +76,33 @@ export default function FeedCard({ item }: { item: FeedItemWithMeta }) {
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
       {/* Header */}
-      <div className="px-4 pt-4 pb-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 flex-wrap">
-          <Link
-            href={`/profile/${item.profiles.id}`}
-            className="font-semibold text-zinc-50 hover:text-zinc-300 transition-colors"
-          >
-            {item.profiles.name}
-          </Link>
-          {item.profiles.is_comp ? (
-            <span className="bg-gradient-to-r from-amber-500 to-yellow-400 text-zinc-900 font-bold text-xs px-2 py-0.5 rounded shadow-sm shadow-amber-500/30">
-              COMP
-            </span>
-          ) : (
-            <span className="bg-zinc-700 text-zinc-400 font-medium text-xs px-2 py-0.5 rounded">
-              REC
-            </span>
-          )}
+      <div className="px-4 pt-4 pb-3 flex items-start justify-between gap-2">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Link
+              href={`/profile/${item.profiles.id}`}
+              className="font-semibold text-zinc-50 hover:text-zinc-300 transition-colors"
+            >
+              {item.profiles.name}
+            </Link>
+            {item.profiles.is_comp ? (
+              <span className="bg-gradient-to-r from-amber-500 to-yellow-400 text-zinc-900 font-bold text-xs px-2 py-0.5 rounded shadow-sm shadow-amber-500/30">
+                COMP
+              </span>
+            ) : (
+              <span className="bg-zinc-700 text-zinc-400 font-medium text-xs px-2 py-0.5 rounded">
+                REC
+              </span>
+            )}
+          </div>
           {checkin && (
-            <span className="text-zinc-500 text-xs">
-              📍 {checkin.gym_name}
-              {checkin.duration_minutes != null && ` · ⏱ ${checkin.duration_minutes} min`}
-            </span>
+            <div className="flex items-center gap-3 text-xs text-zinc-500">
+              {checkin.gym_name && <span>📍 {checkin.gym_name}</span>}
+              {checkin.duration_minutes != null && <span>⏱ {checkin.duration_minutes} min</span>}
+            </div>
           )}
         </div>
-        <span className="text-zinc-500 text-xs shrink-0 ml-2">{timeAgo(item.submitted_at)}</span>
+        <span className="text-zinc-500 text-xs shrink-0 mt-0.5">{timeAgo(item.submitted_at)}</span>
       </div>
 
       {/* Photo */}
