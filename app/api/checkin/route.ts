@@ -1,10 +1,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
-// RSF (Recreational Sports Facility) at UC Berkeley - 2301 Bancroft Way
-const RSF_LAT = 37.86854
-const RSF_LNG = -122.26278
-const RSF_RADIUS_KM = 0.2 // ~200m to cover building + GPS drift
+const GYMS = [
+  // RSF (Recreational Sports Facility) at UC Berkeley - 2301 Bancroft Way
+  { name: 'RSF at Berkeley', lat: 37.86854, lng: -122.26278, radiusKm: 0.2 },
+  // Planet Fitness - 4349 San Pablo Ave, Emeryville, CA 94608
+  { name: 'Planet Fitness Emeryville', lat: 37.84471, lng: -122.28533, radiusKm: 0.2 },
+]
 
 function distanceKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 6371
@@ -16,8 +18,8 @@ function distanceKm(lat1: number, lng1: number, lat2: number, lng2: number): num
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
-function isAtRSF(lat: number, lng: number): boolean {
-  return distanceKm(RSF_LAT, RSF_LNG, lat, lng) <= RSF_RADIUS_KM
+function findGym(lat: number, lng: number) {
+  return GYMS.find(gym => distanceKm(gym.lat, gym.lng, lat, lng) <= gym.radiusKm) ?? null
 }
 
 export async function POST(request: Request) {
@@ -38,16 +40,17 @@ export async function POST(request: Request) {
 
   if (existing) return NextResponse.json({ error: 'Already checked in' }, { status: 400 })
 
-  if (!isAtRSF(lat, lng)) {
+  const gym = findGym(lat, lng)
+  if (!gym) {
     return NextResponse.json(
-      { error: 'You must be at the RSF at Berkeley to check in.' },
+      { error: 'You must be at an approved gym to check in.' },
       { status: 400 }
     )
   }
 
   const { data: checkin, error } = await supabase
     .from('checkins')
-    .insert({ user_id: user.id, location_lat: lat, location_lng: lng, gym_name: 'RSF at Berkeley' })
+    .insert({ user_id: user.id, location_lat: lat, location_lng: lng, gym_name: gym.name })
     .select()
     .single()
 
