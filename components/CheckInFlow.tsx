@@ -149,6 +149,7 @@ export default function CheckInFlow({ userId, currentCount, activeCheckin, disab
         photo_url: publicUrl,
         week_number: week,
         year,
+        checkin_id: checkin?.id ?? null,
       })
       if (dbError) throw dbError
 
