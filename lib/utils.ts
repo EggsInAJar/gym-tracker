@@ -9,7 +9,9 @@ export function getWeekNumber(date: Date): { week: number; year: number } {
 }
 
 export function getCurrentWeek() {
-  return getWeekNumber(new Date())
+  // Force PST/PDT so server (UTC) and client agree on week boundaries
+  const pstString = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })
+  return getWeekNumber(new Date(pstString))
 }
 
 // Returns start and end of week (Monday–Sunday) for display
@@ -35,5 +37,5 @@ export function timeAgo(dateString: string): string {
   if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`
   if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`
-  return new Date(dateString).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return new Date(dateString).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles', month: 'short', day: 'numeric' })
 }

@@ -10,6 +10,7 @@ export default function WeekGrid({ submissions }: WeekGridProps) {
       {submissions.map((sub, index) => {
         const date = new Date(sub.submitted_at)
         const timeStr = date.toLocaleString('en-US', {
+          timeZone: 'America/Los_Angeles',
           weekday: 'short',
           month: 'short',
           day: 'numeric',
