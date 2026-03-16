@@ -5,9 +5,11 @@ const GYMS = [
   // RSF (Recreational Sports Facility) at UC Berkeley - 2301 Bancroft Way
   { name: 'RSF at Berkeley', lat: 37.86854, lng: -122.26278, radiusKm: 0.2 },
   // Planet Fitness - 4349 San Pablo Ave, Emeryville, CA 94608
-  { name: 'Planet Fitness Emeryville', lat: 37.84471, lng: -122.28533, radiusKm: 0.2 },
+  { name: 'Planet Fitness Emeryville', lat: 37.833881, lng: -122.281219, radiusKm: 0.2 },
   // The Standard at Berkeley - 2580 Bancroft Way, Berkeley, CA 94704
   { name: 'The Standard at Berkeley', lat: 37.868622, lng: -122.257671, radiusKm: 0.2 },
+  // Unit 2 at Berkeley - Towle Hall, 2650 Haste St, Berkeley, CA 94720
+  { name: 'Unit 2 at Berkeley', lat: 37.866005, lng: -122.255486, radiusKm: 0.2 },
 ]
 
 function distanceKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
